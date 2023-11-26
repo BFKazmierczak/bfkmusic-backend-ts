@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "waveforms",
+  "info": {
+    "singularName": "waveform",
+    "pluralName": "waveforms",
+    "displayName": "Waveform"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "peaks": {
+      "type": "json"
+    },
+    "file": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::upload.file",
+      "mappedBy": "waveform"
+    }
+  }
+}

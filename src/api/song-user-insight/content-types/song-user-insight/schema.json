@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "song_user_insights",
+  "info": {
+    "singularName": "song-user-insight",
+    "pluralName": "song-user-insights",
+    "displayName": "SongUserInsight",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "song_insights"
+    },
+    "song": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::song.song"
+    },
+    "insight_level": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::insight-level.insight-level"
+    }
+  }
+}

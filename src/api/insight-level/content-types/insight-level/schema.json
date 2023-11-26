@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "insight_levels",
+  "info": {
+    "singularName": "insight-level",
+    "pluralName": "insight-levels",
+    "displayName": "InsightLevel"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}
