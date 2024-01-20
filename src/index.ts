@@ -179,7 +179,7 @@ export default {
           addSongToLibrary: {
             resolve: async (parent, args, context) => {
               const { id: userId } = context.state.user;
-              const { songId } = args.data;
+              const { songId } = args;
 
               const song = await strapi.entityService.findOne(
                 "api::song.song",
@@ -206,6 +206,16 @@ export default {
 
               const response = toEntityResponse(updatedSong, {
                 resourceUID: "api::song.song",
+                args: {
+                  inLibrary: true,
+                },
+              });
+
+              response.value.inLibrary = true;
+              return response;
+            },
+          },
+          calculateFileDuration: {
               });
 
               return response;
