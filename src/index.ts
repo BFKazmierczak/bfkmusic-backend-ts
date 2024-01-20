@@ -101,7 +101,7 @@ export default {
         type Mutation {
           createComment(data: CustomCommentInput!): CommentEntityResponse
 
-          addSongToLibrary(data: AddSongInput!): SongEntityResponse
+          addSongToLibrary(songId: Int!): SongEntityResponse
         }
 
         type Song {
