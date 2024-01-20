@@ -362,6 +362,200 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiCommentComment extends Schema.CollectionType {
+  collectionName: 'comments';
+  info: {
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Attribute.Text;
+    user: Attribute.Relation<
+      'api::comment.comment',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    fileId: Attribute.Integer & Attribute.Required;
+    timeRange: Attribute.String & Attribute.Required;
+    song: Attribute.Relation<
+      'api::comment.comment',
+      'manyToOne',
+      'api::song.song'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::comment.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::comment.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiInsightLevelInsightLevel extends Schema.CollectionType {
+  collectionName: 'insight_levels';
+  info: {
+    singularName: 'insight-level';
+    pluralName: 'insight-levels';
+    displayName: 'InsightLevel';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    description: Attribute.Text;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::insight-level.insight-level',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::insight-level.insight-level',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSongSong extends Schema.CollectionType {
+  collectionName: 'songs';
+  info: {
+    singularName: 'song';
+    pluralName: 'songs';
+    displayName: 'Song';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    description: Attribute.Text;
+    audio: Attribute.Media;
+    comments: Attribute.Relation<
+      'api::song.song',
+      'oneToMany',
+      'api::comment.comment'
+    >;
+    users: Attribute.Relation<
+      'api::song.song',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    owners: Attribute.Relation<
+      'api::song.song',
+      'manyToMany',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::song.song', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::song.song', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSongUserInsightSongUserInsight
+  extends Schema.CollectionType {
+  collectionName: 'song_user_insights';
+  info: {
+    singularName: 'song-user-insight';
+    pluralName: 'song-user-insights';
+    displayName: 'SongUserInsight';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::song-user-insight.song-user-insight',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    song: Attribute.Relation<
+      'api::song-user-insight.song-user-insight',
+      'oneToOne',
+      'api::song.song'
+    >;
+    insight_level: Attribute.Relation<
+      'api::song-user-insight.song-user-insight',
+      'oneToOne',
+      'api::insight-level.insight-level'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::song-user-insight.song-user-insight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::song-user-insight.song-user-insight',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWaveformWaveform extends Schema.CollectionType {
+  collectionName: 'waveforms';
+  info: {
+    singularName: 'waveform';
+    pluralName: 'waveforms';
+    displayName: 'Waveform';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    peaks: Attribute.JSON;
+    file: Attribute.Relation<
+      'api::waveform.waveform',
+      'oneToOne',
+      'plugin::upload.file'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::waveform.waveform',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::waveform.waveform',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -484,6 +678,97 @@ export interface PluginUploadFolder extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::upload.folder',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginContentReleasesRelease extends Schema.CollectionType {
+  collectionName: 'strapi_releases';
+  info: {
+    singularName: 'release';
+    pluralName: 'releases';
+    displayName: 'Release';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    name: Attribute.String & Attribute.Required;
+    releasedAt: Attribute.DateTime;
+    actions: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToMany',
+      'plugin::content-releases.release-action'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::content-releases.release',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginContentReleasesReleaseAction
+  extends Schema.CollectionType {
+  collectionName: 'strapi_release_actions';
+  info: {
+    singularName: 'release-action';
+    pluralName: 'release-actions';
+    displayName: 'Release Action';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    type: Attribute.Enumeration<['publish', 'unpublish']> & Attribute.Required;
+    entry: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'morphToOne'
+    >;
+    contentType: Attribute.String & Attribute.Required;
+    release: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'manyToOne',
+      'plugin::content-releases.release'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::content-releases.release-action',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::content-releases.release-action',
       'oneToOne',
       'admin::user'
     > &
@@ -705,230 +990,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiCommentComment extends Schema.CollectionType {
-  collectionName: 'comments';
-  info: {
-    singularName: 'comment';
-    pluralName: 'comments';
-    displayName: 'Comment';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    content: Attribute.Text;
-    user: Attribute.Relation<
-      'api::comment.comment',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    fileId: Attribute.Integer & Attribute.Required;
-    timeRange: Attribute.String & Attribute.Required;
-    song: Attribute.Relation<
-      'api::comment.comment',
-      'manyToOne',
-      'api::song.song'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::comment.comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::comment.comment',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiInsightLevelInsightLevel extends Schema.CollectionType {
-  collectionName: 'insight_levels';
-  info: {
-    singularName: 'insight-level';
-    pluralName: 'insight-levels';
-    displayName: 'InsightLevel';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    description: Attribute.Text;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::insight-level.insight-level',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::insight-level.insight-level',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiKolekcjaKolekcja extends Schema.CollectionType {
-  collectionName: 'kolekcjas';
-  info: {
-    singularName: 'kolekcja';
-    pluralName: 'kolekcjas';
-    displayName: 'Kolekcja';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    typ_kolekcji: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::kolekcja.kolekcja',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::kolekcja.kolekcja',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiSongSong extends Schema.CollectionType {
-  collectionName: 'songs';
-  info: {
-    singularName: 'song';
-    pluralName: 'songs';
-    displayName: 'Song';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    name: Attribute.String;
-    description: Attribute.Text;
-    audio: Attribute.Media;
-    comments: Attribute.Relation<
-      'api::song.song',
-      'oneToMany',
-      'api::comment.comment'
-    >;
-    users: Attribute.Relation<
-      'api::song.song',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    owners: Attribute.Relation<
-      'api::song.song',
-      'manyToMany',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::song.song', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::song.song', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiSongUserInsightSongUserInsight
-  extends Schema.CollectionType {
-  collectionName: 'song_user_insights';
-  info: {
-    singularName: 'song-user-insight';
-    pluralName: 'song-user-insights';
-    displayName: 'SongUserInsight';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    user: Attribute.Relation<
-      'api::song-user-insight.song-user-insight',
-      'manyToOne',
-      'plugin::users-permissions.user'
-    >;
-    song: Attribute.Relation<
-      'api::song-user-insight.song-user-insight',
-      'oneToOne',
-      'api::song.song'
-    >;
-    insight_level: Attribute.Relation<
-      'api::song-user-insight.song-user-insight',
-      'oneToOne',
-      'api::insight-level.insight-level'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::song-user-insight.song-user-insight',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::song-user-insight.song-user-insight',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiWaveformWaveform extends Schema.CollectionType {
-  collectionName: 'waveforms';
-  info: {
-    singularName: 'waveform';
-    pluralName: 'waveforms';
-    displayName: 'Waveform';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    peaks: Attribute.JSON;
-    file: Attribute.Relation<
-      'api::waveform.waveform',
-      'oneToOne',
-      'plugin::upload.file'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::waveform.waveform',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::waveform.waveform',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -939,18 +1000,19 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::comment.comment': ApiCommentComment;
+      'api::insight-level.insight-level': ApiInsightLevelInsightLevel;
+      'api::song.song': ApiSongSong;
+      'api::song-user-insight.song-user-insight': ApiSongUserInsightSongUserInsight;
+      'api::waveform.waveform': ApiWaveformWaveform;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
+      'plugin::content-releases.release': PluginContentReleasesRelease;
+      'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::comment.comment': ApiCommentComment;
-      'api::insight-level.insight-level': ApiInsightLevelInsightLevel;
-      'api::kolekcja.kolekcja': ApiKolekcjaKolekcja;
-      'api::song.song': ApiSongSong;
-      'api::song-user-insight.song-user-insight': ApiSongUserInsightSongUserInsight;
-      'api::waveform.waveform': ApiWaveformWaveform;
     }
   }
 }
