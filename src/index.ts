@@ -102,6 +102,8 @@ export default {
           createComment(data: CustomCommentInput!): CommentEntityResponse
 
           addSongToLibrary(songId: Int!): SongEntityResponse
+
+          calculateFileDuration(fileId: Int!): UploadFileEntityResponse
         }
 
         type Song {
@@ -216,6 +218,27 @@ export default {
             },
           },
           calculateFileDuration: {
+            resolve: async (parent, args, context) => {
+              const { id: userId } = context.state.user;
+              const { fileId } = args;
+
+              const calculatedDuration = 0;
+
+              const updatedFile = strapi.entityService.update(
+                "plugin::upload.file",
+                fileId,
+                {
+                  data: {
+                    duration: calculatedDuration,
+                  },
+                }
+              );
+
+              const response = toEntityResponse(updatedFile, {
+                resourceUID: "plugin::upload.file",
+                args: {
+                  inLibrary: true,
+                },
               });
 
               return response;
