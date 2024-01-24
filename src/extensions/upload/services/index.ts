@@ -6,7 +6,7 @@ export default {
   calculateDuration: async (file) => {
     ffmpeg.setFfprobePath(ffprobe.path);
 
-    const rootDir = path.resolve(__dirname, "../../../..");
+    const rootDir = path.resolve(__dirname, "../../../../..");
     const filePath = path.join(rootDir, "public", file.url);
 
     console.log("FILEPATH:", filePath);

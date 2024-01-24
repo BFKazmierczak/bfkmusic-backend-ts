@@ -1,6 +1,6 @@
 import { Strapi } from "@strapi/strapi";
-
 import type * as Params from "@strapi/types/dist/modules/entity-service/params";
+import uploadService from "./extensions/upload/services";
 
 interface SongParams
   extends Params.Pick<
@@ -219,26 +219,33 @@ export default {
           },
           calculateFileDuration: {
             resolve: async (parent, args, context) => {
-              const { id: userId } = context.state.user;
+              const user = context.state.user;
+
               const { fileId } = args;
 
-              const calculatedDuration = 0;
+              const file = await strapi.entityService.findOne(
+                "plugin::upload.file",
+                fileId
+              );
+
+              if (!file) throw new Error("File couldn't be found.");
+
+              const calculatedDuration = await uploadService.calculateDuration(
+                file
+              );
 
               const updatedFile = strapi.entityService.update(
                 "plugin::upload.file",
                 fileId,
                 {
                   data: {
-                    duration: calculatedDuration,
+                    duration: calculatedDuration as number,
                   },
                 }
               );
 
               const response = toEntityResponse(updatedFile, {
                 resourceUID: "plugin::upload.file",
-                args: {
-                  inLibrary: true,
-                },
               });
 
               return response;
