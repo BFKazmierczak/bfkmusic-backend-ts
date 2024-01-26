@@ -1,6 +1,7 @@
 import { Strapi } from "@strapi/strapi";
 import type * as Params from "@strapi/types/dist/modules/entity-service/params";
 import uploadService from "./extensions/upload/services";
+import hasRoleWrapper from "./middlewares/hasRoleWrapper";
 
 interface SongParams
   extends Params.Pick<
@@ -126,6 +127,11 @@ export default {
           to: Int!
         }
       `,
+      resolversConfig: {
+        "Mutation.calculateFileDuration": {
+          middlewares: [hasRoleWrapper("Admin")],
+        },
+      },
       resolvers: {
         Mutation: {
           createComment: {
