@@ -13,7 +13,7 @@ export default ({ env }) => ({
         enabled: true,
         origin: env(
           "CORS_ORIGIN",
-          "http://localhost:3000,http://127.0.0.1:3000,http://localhost:1337,http://192.168.0.104:3000"
+          "https://bfkmusic.vercel.app,https://bfkmusic-api.up.railway.app"
         ).split(","), // Specify the allowed origin(s) here
         // headers: ["Content-Type", "Authorization"],
       },
