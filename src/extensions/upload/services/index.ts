@@ -5,8 +5,8 @@ const ffprobeStatic = require("ffprobe-static");
 
 export default {
   calculateDuration: async (file) => {
-    ffmpeg.setFfmpegPath(ffmpegPath);
-    ffmpeg.setFfprobePath(ffprobeStatic.path);
+    // ffmpeg.setFfmpegPath(ffmpegPath);
+    // ffmpeg.setFfprobePath(ffprobeStatic.path);
 
     const rootDir = path.resolve(__dirname, "../../../../..");
     const filePath = path.join(rootDir, "public", file.url);
