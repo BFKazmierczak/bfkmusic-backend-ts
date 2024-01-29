@@ -36,7 +36,7 @@ export default (plugin) => {
             return;
           }
           
-          await strapi.entityService.update(
+          strapi.entityService.update(
             "api::waveform.waveform",
             newWaveform.id,
             {
