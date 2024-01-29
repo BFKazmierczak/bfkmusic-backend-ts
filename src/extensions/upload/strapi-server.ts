@@ -35,10 +35,8 @@ export default (plugin) => {
             console.log("ERROR:", error);
             return;
           }
-
-          console.log({ peaks });
           
-          strapi.entityService.update(
+          await strapi.entityService.update(
             "api::waveform.waveform",
             newWaveform.id,
             {
