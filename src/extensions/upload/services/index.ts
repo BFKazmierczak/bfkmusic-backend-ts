@@ -1,11 +1,11 @@
 const path = require("path");
 const ffmpeg = require("fluent-ffmpeg");
-const ffmpegStatic = require("ffmpeg-static");
+const ffmpegPath = require("ffmpeg-static");
 const ffprobeStatic = require("ffprobe-static");
 
 export default {
   calculateDuration: async (file) => {
-    ffmpeg.setFfmpegPath(ffmpegStatic.path);
+    ffmpeg.setFfmpegPath(ffmpegPath);
     ffmpeg.setFfprobePath(ffprobeStatic.path);
 
     const rootDir = path.resolve(__dirname, "../../../../..");
