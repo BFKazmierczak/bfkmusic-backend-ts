@@ -8,7 +8,7 @@ export default (plugin) => {
     async afterCreate(ctx) {
       const file = ctx.result;
 
-      const rootDir = path.resolve(__dirname, "../../..");
+      const rootDir = path.resolve(__dirname, "../../../..");
       const filePath = path.join(rootDir, "public", file.url);
 
       try {
