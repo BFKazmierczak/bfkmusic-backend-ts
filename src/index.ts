@@ -71,17 +71,21 @@ export default {
 
       const userId = context.state.user.id;
 
+      const isLibraryQuery = args?.filters?.inLibrary;
+
       const data = await strapi.entityService.findMany("api::song.song", {
         ...transformedArgs,
         populate: "users",
       });
 
-      console.log({ data });
-
-      const modifiedData = data.map((song) => ({
-        ...song,
-        inLibrary: song.users.some((user) => user.id === userId),
-      }));
+      const modifiedData = data
+        .map((song) => ({
+          ...song,
+          inLibrary: song.users.some((user) => user.id === userId),
+        }))
+        .filter((song) =>
+          isLibraryQuery === true ? song.inLibrary === true : song
+        );
 
       const response = toEntityResponseCollection(modifiedData, {
         args,
