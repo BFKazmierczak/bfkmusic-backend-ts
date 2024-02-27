@@ -118,6 +118,10 @@ export default {
           content: String!
         }
 
+        input SongFiltersInput {
+          inLibrary: Boolean
+        }
+
         input AddSongInput {
           songId: Int!
         }
