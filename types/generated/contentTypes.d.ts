@@ -900,6 +900,9 @@ export interface ApiSongSong extends Schema.CollectionType {
       'manyToMany',
       'plugin::users-permissions.user'
     >;
+    non_owner_visible: Attribute.Boolean &
+      Attribute.Required &
+      Attribute.DefaultTo<true>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
