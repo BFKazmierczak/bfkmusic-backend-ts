@@ -43,6 +43,11 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "inversedBy": "owned_songs"
+    },
+    "non_owner_visible": {
+      "type": "boolean",
+      "default": true,
+      "required": true
     }
   }
 }
