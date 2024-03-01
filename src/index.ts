@@ -81,16 +81,15 @@ export default {
       const modifiedData = data
         .map((song) => {
           if (
-            song.non_owner_visible === false &&
-            !song.owners.some((ownerUser) => ownerUser.id === userId)
+            song.non_owner_visible === true ||
+            (song.non_owner_visible === false &&
+              song.owners.some((ownerUser) => ownerUser.id === userId))
           ) {
-            return null;
+            return {
+              ...song,
+              inLibrary: song.users.some((user) => user.id === userId),
+            };
           }
-
-          return {
-            ...song,
-            inLibrary: song.users.some((user) => user.id === userId),
-          };
         })
         .filter((song) =>
           isLibraryQuery === true ? song.inLibrary === true : song
