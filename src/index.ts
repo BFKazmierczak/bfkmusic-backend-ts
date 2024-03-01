@@ -69,7 +69,7 @@ export default {
         usePagination: true,
       }) as SongParams;
 
-      const userId = context.state.user.id;
+      const userId = context.state.user?.id;
 
       const isLibraryQuery = args?.filters?.inLibrary;
 
