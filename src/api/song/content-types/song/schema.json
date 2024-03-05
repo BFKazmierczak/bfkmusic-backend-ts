@@ -42,6 +42,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
+      "private": true,
       "inversedBy": "owned_songs"
     },
     "non_owner_visible": {

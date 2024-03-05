@@ -103,12 +103,55 @@ export default {
       return response;
     }
 
-    // const { formatGraphqlError } = strapi.plugin("graphql").formatGraphqlError;
+    async function resolveOwnedSongs(parent, args, context) {
+      const transformedArgs = transformArgs(args, {
+        contentType: strapi.contentTypes["api::song.song"],
+        usePagination: true,
+      }) as SongParams;
+
+      const userId = context.state.user?.id;
+
+      const data = await strapi.entityService.findMany("api::song.song", {
+        ...transformedArgs,
+        populate: ["owners"],
+        filters: {
+          owners: { id: { $in: userId } },
+        },
+      });
+
+      const response = toEntityResponseCollection(data, {
+        args,
+        resourceUID: "api::song.song",
+      });
+
+      return response;
+    }
 
     extensionService.use(({ strapi }: { strapi: Strapi }) => ({
       typeDefs: `
         type Query {
           comments: CommentEntityResponseCollection
+          ownedSongs(
+            filters: SongFiltersHiddenInput
+          ): SongEntityResponseCollection
+          songs(
+            filters: SongFiltersHiddenInput
+          ): SongEntityResponseCollection
+        }
+
+        input SongFiltersHiddenInput {
+          inLibrary: Boolean
+          id: IDFilterInput
+          name: StringFilterInput
+          description: StringFilterInput
+          comments: CommentFiltersInput
+          non_owner_visible: BooleanFilterInput
+          createdAt: DateTimeFilterInput
+          updatedAt: DateTimeFilterInput
+          publishedAt: DateTimeFilterInput
+          and: [SongFiltersInput]
+          or: [SongFiltersInput]
+          not: SongFiltersInput
         }
 
         type Mutation {
@@ -280,6 +323,9 @@ export default {
           },
           songs: {
             resolve: resolveSongs,
+          },
+          ownedSongs: {
+            resolve: resolveOwnedSongs,
           },
         },
       },
