@@ -160,6 +160,8 @@ export default {
           addSongToLibrary(songId: Int!): SongEntityResponse
 
           calculateFileDuration(fileId: Int!): UploadFileEntityResponse
+
+          throwAnError: Boolean
         }
 
         type Song {
@@ -314,6 +316,11 @@ export default {
               });
 
               return response;
+            },
+          },
+          throwAnError: {
+            resolve: async (parent, args, context) => {
+              throw new Error("Error thrown");
             },
           },
         },
