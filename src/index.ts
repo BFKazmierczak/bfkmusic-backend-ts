@@ -41,8 +41,6 @@ export default {
 
       const userId = context.state.user.id;
 
-      console.log("inside comments resolver");
-
       transformedArgs.filters = {
         ...transformedArgs.filters,
         user: {

@@ -36,6 +36,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
+      "private": true,
       "inversedBy": "songs"
     },
     "owners": {
