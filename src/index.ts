@@ -72,6 +72,13 @@ export default {
       const userId = context.state.user?.id;
 
       const isLibraryQuery = args?.filters?.inLibrary;
+      const isOwnedQuery = args?.filters?.isOwned;
+
+      if (isLibraryQuery && isOwnedQuery) {
+        throw new Error(
+          "Cannot query songs that are both in library and owned."
+        );
+      }
 
       const data = await strapi.entityService.findMany("api::song.song", {
         ...transformedArgs,
@@ -80,46 +87,30 @@ export default {
 
       const modifiedData = data
         .map((song) => {
+          let isOwned = false;
+          if (song.owners.some((owner) => owner.id === userId)) {
+            isOwned = true;
+          }
+
           if (
             song.non_owner_visible === true ||
-            (song.non_owner_visible === false &&
-              song.owners.some((ownerUser) => ownerUser.id === userId))
+            (song.non_owner_visible === false && isOwned)
           ) {
             return {
               ...song,
               inLibrary: song.users.some((user) => user.id === userId),
+              isOwned,
             };
           }
         })
-        .filter((song) =>
-          isLibraryQuery === true ? song.inLibrary === true : song
-        );
+        .filter((song) => {
+          if (isLibraryQuery && song.inLibrary === false) return false;
+          if (isOwnedQuery && song.isOwned === false) return false;
+
+          return true;
+        });
 
       const response = toEntityResponseCollection(modifiedData, {
-        args,
-        resourceUID: "api::song.song",
-      });
-
-      return response;
-    }
-
-    async function resolveOwnedSongs(parent, args, context) {
-      const transformedArgs = transformArgs(args, {
-        contentType: strapi.contentTypes["api::song.song"],
-        usePagination: true,
-      }) as SongParams;
-
-      const userId = context.state.user?.id;
-
-      const data = await strapi.entityService.findMany("api::song.song", {
-        ...transformedArgs,
-        populate: ["owners"],
-        filters: {
-          owners: { id: { $in: userId } },
-        },
-      });
-
-      const response = toEntityResponseCollection(data, {
         args,
         resourceUID: "api::song.song",
       });
@@ -131,9 +122,6 @@ export default {
       typeDefs: `
         type Query {
           comments: CommentEntityResponseCollection
-          ownedSongs(
-            filters: SongFiltersHiddenInput
-          ): SongEntityResponseCollection
           songs(
             filters: SongFiltersHiddenInput
           ): SongEntityResponseCollection
@@ -141,6 +129,7 @@ export default {
 
         input SongFiltersHiddenInput {
           inLibrary: Boolean
+          isOwned: Boolean
           id: IDFilterInput
           name: StringFilterInput
           description: StringFilterInput
@@ -166,6 +155,7 @@ export default {
 
         type Song {
           inLibrary: Boolean
+          isOwned: Boolean
         }
 
         input CustomCommentInput {
@@ -329,10 +319,7 @@ export default {
             resolve: resolveComments,
           },
           songs: {
-            resolve: resolveSongs,
-          },
-          ownedSongs: {
-            resolve: resolveOwnedSongs,
+            resolve: resolveSfongs,
           },
         },
       },
