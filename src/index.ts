@@ -319,7 +319,7 @@ export default {
             resolve: resolveComments,
           },
           songs: {
-            resolve: resolveSfongs,
+            resolve: resolveSongs,
           },
         },
       },
