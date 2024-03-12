@@ -11,6 +11,8 @@ export default {
     const rootDir = path.resolve(__dirname, "../../../../..");
     const filePath = path.join(rootDir, "public", file.url);
 
+    console.log({ filePath });
+
     console.log({ ffmpegPath });
     console.log(ffprobeStatic.path);
     console.log("FILEPATH:", filePath);
