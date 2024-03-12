@@ -9,8 +9,7 @@ export default async (next, parent, args, ctx, info, roleName) => {
     }
   );
 
-  if (user.role.name !== roleName)
-    throw new Error("You are not allowed to see this");
+  if (user.role.name !== roleName) throw new Error("Forbidden access");
 
   return next(parent, args, ctx, info);
 };
