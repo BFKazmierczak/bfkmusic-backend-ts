@@ -9,7 +9,7 @@ export default {
     // ffmpeg.setFfprobePath(ffprobeStatic.path);
 
     const rootDir = path.resolve(__dirname, "../../../../..");
-    const filePath = path.join(rootDir, "public", file.url).slice(1);
+    const filePath = path.join(rootDir, "public", file.url);
 
     console.log({ filePath });
 
