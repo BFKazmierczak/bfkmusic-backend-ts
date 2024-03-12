@@ -18,7 +18,7 @@ export default {
 
     return new Promise((resolve, reject) => {
       ffmpeg.ffprobe(filePath, (err, metadata) => {
-        if (err) reject(err);
+        if (err) reject(`ERROR OBTAINING DURATION: ${err}`);
         else {
           const durationInSeconds = metadata.format.duration;
           resolve(durationInSeconds);
