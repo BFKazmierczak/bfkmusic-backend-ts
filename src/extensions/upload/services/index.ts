@@ -1,4 +1,4 @@
-const path = require("path");
+import path from "path";
 const ffmpeg = require("fluent-ffmpeg");
 const ffmpegPath = require("ffmpeg-static");
 const ffprobeStatic = require("ffprobe-static");
@@ -9,7 +9,7 @@ export default {
     // ffmpeg.setFfprobePath(ffprobeStatic.path);
 
     const rootDir = path.resolve(__dirname, "../../../../..");
-    const filePath = path.join(rootDir, "public", file.url);
+    const filePath = path.join(rootDir, "public", file.url).slice(1);
 
     console.log({ filePath });
 
