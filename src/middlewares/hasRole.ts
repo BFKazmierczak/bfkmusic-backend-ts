@@ -1,9 +1,16 @@
-export default (next, parent, args, ctx, info, roleName) => {
-  const user = ctx.state.user.id; // user ID that makes the query
+export default async (next, parent, args, ctx, info, roleName) => {
+  const userId = ctx.state.user.id; // user ID that makes the query
 
-  console.log({ user });
-  console.log(roleName);
+  const user = await strapi.entityService.findOne(
+    "plugin::users-permissions.user",
+    userId,
+    {
+      populate: "role",
+    }
+  );
 
-  throw new Error("You are not allowed to see this");
+  if (user.role.name !== roleName)
+    throw new Error("You are not allowed to see this");
+
   return next(parent, args, ctx, info);
 };
