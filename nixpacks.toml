@@ -1,3 +1,6 @@
 
-[phases.name]
-aptPkgs = ["ffmpeg"]
+[phases.setup]
+aptPkgs = ["...", "ffmpeg"]
+
+[build]
+nixpacksVersion = "1.15.0"
